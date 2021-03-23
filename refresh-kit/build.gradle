@@ -36,3 +36,4 @@ dependencies {
 
     implementation 'com.android.ydkit:adapter-kit:1.0.0'
 }
+apply from: './bintray.gradle'
