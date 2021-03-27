@@ -10,6 +10,7 @@
 ```
 dependencies {
       implementation 'com.android.ydkit:refresh-kit:1.0.0'
+      implementation 'com.android.ydkit:adapter-kit:1.0.0'//加载更多需搭配使用
 }
 ```
 
