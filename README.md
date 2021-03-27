@@ -1,4 +1,4 @@
-# AdapterKit
+# RefreshKit
 
 <img src="https://github.com/ydstar/RefreshKit/blob/main/preview/show.gif" alt="动图演示效果" width="250px">
 
