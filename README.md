@@ -22,18 +22,18 @@ YdKit 是一组功能丰富的 Android 通用组件。
 仅支持`AndroidX`
 ```
 dependencies {
-      implementation 'com.android.ydkit:refresh-kit:1.0.0'
-      implementation 'com.android.ydkit:adapter-kit:1.0.0'//加载更多需搭配使用
+      implementation 'com.android.ydkit:refresh-kit:1.0.1'
+      implementation 'com.android.ydkit:adapter-kit:1.0.1'//可选项(加载更多需搭配使用)
 }
 ```
 
 ## 使用方法
 
 #### 只是使用下拉刷新
-#### 1.在XML布局文件中添加 IRefreshLayout
+#### 1.在XML布局文件中添加 RefreshLayout
 ```java
 <?xml version="1.0" encoding="utf-8"?>
-<com.refresh.kit.core.IRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.refresh.kit.core.RefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -43,15 +43,15 @@ dependencies {
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-</com.refresh.kit.core.IRefreshLayout>
+</com.refresh.kit.core.RefreshLayout>
 ```
 
 #### 2.在 Activity 或者 Fragment 中添加代码
 ```java
 val refreshLayout = findViewById<IRefreshLayout>(R.id.refresh_layout)
 //自定义下拉头
-val iLottieOverView = ILottieOverView(this)
-refreshLayout.setRefreshOverView(iLottieOverView)
+val lottieOverView = LottieOverView(this)
+refreshLayout.setRefreshOverView(lottieOverView)
 
 refreshLayout.setRefreshListener(object : IRefresh.IRefreshListener {
       //下拉刷新的时候会调用下面这个方法,一般情况下都是下拉刷新之后去请求数据,然后刷新列表
