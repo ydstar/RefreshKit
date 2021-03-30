@@ -8,7 +8,7 @@ def gitUrl = 'https://github.com/ydstar/RefreshKit.git'
 //仓库组
 group = 'com.android.ydkit'
 //版本
-version = '1.0.1'
+version = '1.0.2'
 install {
     repositories.mavenInstaller {
         pom {
@@ -60,7 +60,7 @@ bintray {
     configurations = ['archives']
     pkg {
         version {
-            name = '1.0.1'
+            name = '1.0.2'
             desc = '轻量级下拉刷新和上拉加载组件'
         }
         repo = 'RefreshKitRepo' //repository 仓库名称,要能对应上
