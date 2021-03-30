@@ -20,9 +20,9 @@ import com.refresh.kit.view.OverView;
  * Des: 下拉刷新View
  * 本身是个FrameLayout,然后里面可以包裹RecyclerView或者ScrollView
  */
-public class RefreshLayout extends FrameLayout implements IRefresh {
+public class RefreshKitLayout extends FrameLayout implements IRefresh {
 
-    private static final String TAG = RefreshLayout.class.getSimpleName();
+    private static final String TAG = RefreshKitLayout.class.getSimpleName();
     private OverView.IRefreshState mState;
     private android.view.GestureDetector mGestureDetector;
     private AutoScroller mAutoScroller;
@@ -32,17 +32,17 @@ public class RefreshLayout extends FrameLayout implements IRefresh {
     //刷新时是否禁止滚动
     private boolean disableRefreshScroll;
 
-    public RefreshLayout(Context context, AttributeSet attrs) {
+    public RefreshKitLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public RefreshLayout(Context context, AttributeSet attrs, int defStyle) {
+    public RefreshKitLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
-    public RefreshLayout(Context context) {
+    public RefreshKitLayout(Context context) {
         super(context);
         init();
     }
@@ -104,7 +104,7 @@ public class RefreshLayout extends FrameLayout implements IRefresh {
             }
 
             View head = getChildAt(0);
-            View child = ScrollUtil.findScrollableChild(RefreshLayout.this);
+            View child = ScrollUtil.findScrollableChild(RefreshKitLayout.this);
             if (ScrollUtil.childScrolled(child)) {
                 //如果列表发生了滚动则不处理
                 return false;

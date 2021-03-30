@@ -14,7 +14,7 @@ import com.example.refreshkit.R
 import com.refresh.kit.MagicRecyclerView
 
 import com.refresh.kit.core.IRefresh
-import com.refresh.kit.core.RefreshLayout
+import com.refresh.kit.core.RefreshKitLayout
 
 import com.refresh.kit.view.OverView
 import com.refresh.kit.view.TextOverView
@@ -27,7 +27,7 @@ abstract class AbsListActivity : AppCompatActivity(), IRefresh.IRefreshListener 
 
     private lateinit var mRefreshHeaderView: TextOverView
     private lateinit var mAdapter: AdapterKit
-    protected var mRefreshLayout: RefreshLayout? = null
+    protected var mRefreshLayout: RefreshKitLayout? = null
     protected var mRecyclerView: MagicRecyclerView? = null
 
     private var mProgressBar: ContentLoadingProgressBar? = null

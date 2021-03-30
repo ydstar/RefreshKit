@@ -39,6 +39,6 @@ dependencies {
 
     implementation 'com.android.ydkit:adapter-kit:1.0.1'
 
-//    implementation project(path: ':refresh-kit')
-    implementation 'com.android.ydkit:refresh-kit:1.0.1'
+    implementation project(path: ':refresh-kit')
+//    implementation 'com.android.ydkit:refresh-kit:1.0.1'
 }
