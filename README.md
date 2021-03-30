@@ -48,7 +48,7 @@ dependencies {
 
 #### 2.在 Activity 或者 Fragment 中添加代码
 ```java
-val refreshLayout = findViewById<IRefreshLayout>(R.id.refresh_layout)
+val refreshLayout = findViewById<RefreshLayout>(R.id.refresh_layout)
 //自定义下拉头
 val lottieOverView = LottieOverView(this)
 refreshLayout.setRefreshOverView(lottieOverView)
