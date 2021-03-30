@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.refresh.kit.util.IDisplayUtil;
+import com.refresh.kit.util.DisplayUtil;
 
 
 /**
@@ -13,7 +13,7 @@ import com.refresh.kit.util.IDisplayUtil;
  * Email: hydznsqk@163.com
  * Des:下拉刷新的Overlay视图,可以重载这个类来定义自己的Overlay
  */
-public abstract class IOverView  extends FrameLayout {
+public abstract class OverView extends FrameLayout {
 
 
     protected IRefreshState mState = IRefreshState.STATE_INIT;
@@ -30,23 +30,23 @@ public abstract class IOverView  extends FrameLayout {
      */
     public float maxDamp = 2.2f;
 
-    public IOverView(Context context, AttributeSet attrs, int defStyle) {
+    public OverView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         preInit();
     }
 
-    public IOverView(Context context, AttributeSet attrs) {
+    public OverView(Context context, AttributeSet attrs) {
         super(context, attrs);
         preInit();
     }
 
-    public IOverView(Context context) {
+    public OverView(Context context) {
         super(context);
         preInit();
     }
 
     protected void preInit() {
-        mPullRefreshHeight = IDisplayUtil.dp2px(66, getResources());
+        mPullRefreshHeight = DisplayUtil.dp2px(66, getResources());
         init();
     }
 

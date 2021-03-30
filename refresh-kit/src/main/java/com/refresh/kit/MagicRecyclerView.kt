@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.adapter.kit.IAdapter
-
+import com.adapter.kit.AdapterKit
+import com.refresh.kit.util.DisplayUtil
 
 /**
  * 风骚实现分页预加载
  */
-open class IRecyclerView @JvmOverloads constructor(
+open class MagicRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
@@ -26,8 +26,8 @@ open class IRecyclerView @JvmOverloads constructor(
     inner class LoadMoreScrollListener(val prefetchSize: Int, val callback: () -> Unit) :
         OnScrollListener() {
 
-        //咱们这里的强转，因为前面 会有前置检查
-        val iAdapter = adapter as IAdapter
+        //这里的强转，因为前面 会有前置检查
+        val iAdapter = adapter as AdapterKit
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             //需要根据当前的滑动状态  已决定要不要添加footer view ，要不执行上拉加载分页的动作
@@ -39,13 +39,13 @@ open class IRecyclerView @JvmOverloads constructor(
             if (totalItemCount <= 0)
                 return
 
-            //此时，咱们需要在滑动状态为 拖动状态时，就要判断要不要添加footer
+            //此时，需要在滑动状态为 拖动状态时，就要判断要不要添加footer
             //目的就是为了防止列表滑动到底部了但是 footerview 还没显示出来，
             //1. 依旧需要判断列表是否能够滑动,那么问题来了，如何判断RecyclerView ，是否可以继续向下滑动
             val canScrollVertical = recyclerView.canScrollVertically(1)
 
             //还有一种情况,canScrollVertical 咱们是检查他能不能欧股继续向下滑动，
-            //特殊情况，咱们的列表已经滑动到底部了，但是分页失败了。
+            //特殊情况，列表已经滑动到底部了，但是分页失败了。
             val lastVisibleItem = findLastVisibleItem(recyclerView)
             val firstVisibleItem = findFirstVisibleItem(recyclerView)
             if (lastVisibleItem <= 0)
@@ -74,8 +74,6 @@ open class IRecyclerView @JvmOverloads constructor(
 
         private fun addFooterView() {
             val footerView = getFooterView()
-            //但是，这里有个坑。。。在一些边界场景下。会出现多次添加的情况， 添加之前先 remove --》IAdapter。.removeFooterView()
-
             //主要是为了避免 removeFooterView 不及时，在边界场景下可能会出现，footerView还没从recyclervIEW上移除掉，但我们又调用了addFooterView，
             //造成的重复添加的情况，此时会抛出 add view must call removeview form it parent first exception
             if (footerView.parent != null) {
@@ -90,9 +88,10 @@ open class IRecyclerView @JvmOverloads constructor(
         private fun getFooterView(): View {
             if (mFooterView == null) {
                 mFooterView = LayoutInflater.from(context)
-                    .inflate(R.layout.layout_footer_loading, this@IRecyclerView, false)
+                    .inflate(R.layout.layout_footer_loading, this@MagicRecyclerView, false)
 
             }
+            resizeFootView()
             return mFooterView!!
         }
 
@@ -127,8 +126,8 @@ open class IRecyclerView @JvmOverloads constructor(
      * 开启加载更多
      */
     fun enableLoadMore(callback: () -> Unit, prefetchSize: Int) {
-        if (adapter !is IAdapter) {
-            throw RuntimeException("enableLoadMore must use IAdapter")
+        if (adapter !is AdapterKit) {
+            throw RuntimeException("enableLoadMore must use AdapterKit")
         }
         mLoadMoreScrollListener = LoadMoreScrollListener(prefetchSize, callback)
         addOnScrollListener(mLoadMoreScrollListener!!)
@@ -138,10 +137,10 @@ open class IRecyclerView @JvmOverloads constructor(
      * 禁用加载更多
      */
     fun disableLoadMore() {
-        if (adapter !is IAdapter) {
-            throw RuntimeException("disableLoadMore must use IAdapter")
+        if (adapter !is AdapterKit) {
+            throw RuntimeException("disableLoadMore must use AdapterKit")
         }
-        val iAdapter = adapter as IAdapter
+        val iAdapter = adapter as AdapterKit
         mFooterView?.let {
             if (mFooterView!!.parent != null) {
                 iAdapter.removeFooterView(mFooterView!!)
@@ -166,11 +165,11 @@ open class IRecyclerView @JvmOverloads constructor(
      * 加载更多成功
      */
     fun loadFinished(success: Boolean) {
-        if (adapter !is IAdapter) {
-            throw RuntimeException("loadFinished must use IAdapter")
+        if (adapter !is AdapterKit) {
+            throw RuntimeException("loadFinished must use AdapterKit")
         }
         mIsLoadingMore = false
-        val iAdapter = adapter as IAdapter
+        val iAdapter = adapter as AdapterKit
         if (!success) {
             mFooterView?.let {
                 if (mFooterView!!.parent != null) {
@@ -178,5 +177,15 @@ open class IRecyclerView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    /**
+     * 适配折叠屏,重新计算footView的宽和高
+     */
+    private fun resizeFootView() {
+        val width: Int = DisplayUtil.getDisplayWidthInPx(context)
+        val layoutParams = mFooterView?.layoutParams
+        layoutParams?.width = width
+        mFooterView?.layoutParams = layoutParams
     }
 }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Email: hydznsqk@163.com
  * Des:
  */
-public class IScrollUtil {
+public class ScrollUtil {
     /**
      * 判断child是否发生了滚动
      *

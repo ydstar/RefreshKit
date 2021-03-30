@@ -18,20 +18,20 @@ import com.refresh.kit.R;
  * Email: hydznsqk@163.com
  * Des: 自定义下拉视图
  */
-public class ITextOverView extends IOverView {
+public class TextOverView extends OverView {
 
     private TextView mText;
     private View mRotateView;
 
-    public ITextOverView(Context context, AttributeSet attrs, int defStyle) {
+    public TextOverView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public ITextOverView(Context context, AttributeSet attrs) {
+    public TextOverView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ITextOverView(Context context) {
+    public TextOverView(Context context) {
         super(context);
     }
 

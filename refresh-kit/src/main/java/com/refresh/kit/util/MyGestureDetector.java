@@ -9,7 +9,7 @@ import android.view.MotionEvent;
  * Email: hydznsqk@163.com
  * Des:
  */
-public class IGestureDetector implements GestureDetector.OnGestureListener {
+public class MyGestureDetector implements GestureDetector.OnGestureListener {
     @Override
     public boolean onDown(MotionEvent e) {
         return false;

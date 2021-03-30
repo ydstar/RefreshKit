@@ -2,16 +2,15 @@ package com.refresh.kit.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
 
-import com.refresh.kit.util.IGestureDetector;
-import com.refresh.kit.util.IScrollUtil;
-import com.refresh.kit.view.IOverView;
+import com.refresh.kit.util.MyGestureDetector;
+import com.refresh.kit.util.ScrollUtil;
+import com.refresh.kit.view.OverView;
 
 
 /**
@@ -21,35 +20,35 @@ import com.refresh.kit.view.IOverView;
  * Des: 下拉刷新View
  * 本身是个FrameLayout,然后里面可以包裹RecyclerView或者ScrollView
  */
-public class IRefreshLayout extends FrameLayout implements IRefresh {
+public class RefreshLayout extends FrameLayout implements IRefresh {
 
-    private static final String TAG = IRefreshLayout.class.getSimpleName();
-    private IOverView.IRefreshState mState;
-    private GestureDetector mGestureDetector;
+    private static final String TAG = RefreshLayout.class.getSimpleName();
+    private OverView.IRefreshState mState;
+    private android.view.GestureDetector mGestureDetector;
     private AutoScroller mAutoScroller;
     private IRefresh.IRefreshListener mRefreshListener;
-    protected IOverView mOverView;
+    protected OverView mOverView;
     private int mLastY;
     //刷新时是否禁止滚动
     private boolean disableRefreshScroll;
 
-    public IRefreshLayout(Context context, AttributeSet attrs) {
+    public RefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public IRefreshLayout(Context context, AttributeSet attrs, int defStyle) {
+    public RefreshLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
-    public IRefreshLayout(Context context) {
+    public RefreshLayout(Context context) {
         super(context);
         init();
     }
 
     private void init() {
-        mGestureDetector = new GestureDetector(getContext(), mIGestureDetector);
+        mGestureDetector = new android.view.GestureDetector(getContext(), mIGestureDetector);
         mAutoScroller = new AutoScroller();
     }
 
@@ -62,14 +61,14 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
     public void refreshFinished() {
         final View head = getChildAt(0);
         mOverView.onFinish();
-        mOverView.setState(IOverView.IRefreshState.STATE_INIT);
+        mOverView.setState(OverView.IRefreshState.STATE_INIT);
         final int bottom = head.getBottom();
         if (bottom > 0) {
             //下over pull 200，height 100
             //  bottom  =100 ,height 100
             recover(bottom);
         }
-        mState = IOverView.IRefreshState.STATE_INIT;
+        mState = OverView.IRefreshState.STATE_INIT;
 
     }
 
@@ -84,7 +83,7 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
      * @param iOverView
      */
     @Override
-    public void setRefreshOverView(IOverView iOverView) {
+    public void setRefreshOverView(OverView iOverView) {
         if (this.mOverView != null) {
             removeView(mOverView);
         }
@@ -93,27 +92,27 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
         addView(mOverView, 0, params);
     }
 
-    IGestureDetector mIGestureDetector = new IGestureDetector() {
+    MyGestureDetector mIGestureDetector = new MyGestureDetector() {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float disX, float disY) {
             if (Math.abs(disX) > Math.abs(disY) || mRefreshListener != null && !mRefreshListener.enableRefresh()) {
                 //横向滑动，或刷新被禁止则不处理
                 return false;
             }
-            if (disableRefreshScroll && mState == IOverView.IRefreshState.STATE_REFRESH) {//刷新时是否禁止滑动
+            if (disableRefreshScroll && mState == OverView.IRefreshState.STATE_REFRESH) {//刷新时是否禁止滑动
                 return true;
             }
 
             View head = getChildAt(0);
-            View child = IScrollUtil.findScrollableChild(IRefreshLayout.this);
-            if (IScrollUtil.childScrolled(child)) {
+            View child = ScrollUtil.findScrollableChild(RefreshLayout.this);
+            if (ScrollUtil.childScrolled(child)) {
                 //如果列表发生了滚动则不处理
                 return false;
             }
             //没有刷新或没有达到可以刷新的距离，且头部已经划出或下拉
-            if ((mState != IOverView.IRefreshState.STATE_REFRESH || head.getBottom() <= mOverView.mPullRefreshHeight) && (head.getBottom() > 0 || disY <= 0.0F)) {
+            if ((mState != OverView.IRefreshState.STATE_REFRESH || head.getBottom() <= mOverView.mPullRefreshHeight) && (head.getBottom() > 0 || disY <= 0.0F)) {
                 //还在滑动中
-                if (mState != IOverView.IRefreshState.STATE_OVER_RELEASE) {
+                if (mState != OverView.IRefreshState.STATE_OVER_RELEASE) {
                     int speed;
                     //阻尼计算
                     if (child.getTop() < mOverView.mPullRefreshHeight) {
@@ -145,7 +144,7 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
         if (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL
                 || ev.getAction() == MotionEvent.ACTION_POINTER_INDEX_MASK) {//松开手
             if (head.getBottom() > 0) {
-                if (mState != IOverView.IRefreshState.STATE_REFRESH) {//非正在刷新
+                if (mState != OverView.IRefreshState.STATE_REFRESH) {//非正在刷新
                     recover(head.getBottom());
                     return false;
                 }
@@ -154,7 +153,7 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
         }
         boolean consumed = mGestureDetector.onTouchEvent(ev);
 
-        if ((consumed || (mState != IOverView.IRefreshState.STATE_INIT && mState != IOverView.IRefreshState.STATE_REFRESH)) && head.getBottom() != 0) {
+        if ((consumed || (mState != OverView.IRefreshState.STATE_INIT && mState != OverView.IRefreshState.STATE_REFRESH)) && head.getBottom() != 0) {
             ev.setAction(MotionEvent.ACTION_CANCEL);//让父类接受不到真实的事件
             return super.dispatchTouchEvent(ev);
         }
@@ -174,7 +173,7 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
         View child = getChildAt(1);
         if (head != null && child != null) {
             int childTop = child.getTop();
-            if (mState == IOverView.IRefreshState.STATE_REFRESH) {
+            if (mState == OverView.IRefreshState.STATE_REFRESH) {
                 head.layout(0, mOverView.mPullRefreshHeight - head.getMeasuredHeight(), right, mOverView.mPullRefreshHeight);
                 child.layout(0, mOverView.mPullRefreshHeight, right, mOverView.mPullRefreshHeight + child.getMeasuredHeight());
             } else {
@@ -194,7 +193,7 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
     private void recover(int dis) {//dis =200  200-100
         if (mRefreshListener != null && dis > mOverView.mPullRefreshHeight) {
             mAutoScroller.recover(dis - mOverView.mPullRefreshHeight);
-            mState = IOverView.IRefreshState.STATE_OVER_RELEASE;
+            mState = OverView.IRefreshState.STATE_OVER_RELEASE;
         } else {
             mAutoScroller.recover(dis);
         }
@@ -217,28 +216,28 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
             //移动head与child的位置，到原始位置
             head.offsetTopAndBottom(offsetY);
             child.offsetTopAndBottom(offsetY);
-            if (mState != IOverView.IRefreshState.STATE_REFRESH) {
-                mState = IOverView.IRefreshState.STATE_INIT;
+            if (mState != OverView.IRefreshState.STATE_REFRESH) {
+                mState = OverView.IRefreshState.STATE_INIT;
             }
-        } else if (mState == IOverView.IRefreshState.STATE_REFRESH && childTop > mOverView.mPullRefreshHeight) {
+        } else if (mState == OverView.IRefreshState.STATE_REFRESH && childTop > mOverView.mPullRefreshHeight) {
             //如果正在下拉刷新中，禁止继续下拉
             return false;
         } else if (childTop <= mOverView.mPullRefreshHeight) {//还没超出设定的刷新距离
-            if (mOverView.getState() != IOverView.IRefreshState.STATE_VISIBLE && nonAuto) {//头部开始显示
+            if (mOverView.getState() != OverView.IRefreshState.STATE_VISIBLE && nonAuto) {//头部开始显示
                 mOverView.onVisible();
-                mOverView.setState(IOverView.IRefreshState.STATE_VISIBLE);
-                mState = IOverView.IRefreshState.STATE_VISIBLE;
+                mOverView.setState(OverView.IRefreshState.STATE_VISIBLE);
+                mState = OverView.IRefreshState.STATE_VISIBLE;
             }
             head.offsetTopAndBottom(offsetY);
             child.offsetTopAndBottom(offsetY);
-            if (childTop == mOverView.mPullRefreshHeight && mState == IOverView.IRefreshState.STATE_OVER_RELEASE) {
+            if (childTop == mOverView.mPullRefreshHeight && mState == OverView.IRefreshState.STATE_OVER_RELEASE) {
                 refresh();
             }
         } else {
-            if (mOverView.getState() != IOverView.IRefreshState.STATE_OVER && nonAuto) {
+            if (mOverView.getState() != OverView.IRefreshState.STATE_OVER && nonAuto) {
                 //超出刷新位置
                 mOverView.onOver();
-                mOverView.setState(IOverView.IRefreshState.STATE_OVER);
+                mOverView.setState(OverView.IRefreshState.STATE_OVER);
             }
             head.offsetTopAndBottom(offsetY);
             child.offsetTopAndBottom(offsetY);
@@ -255,10 +254,10 @@ public class IRefreshLayout extends FrameLayout implements IRefresh {
      */
     private void refresh() {
         if (mRefreshListener != null) {
-            mState = IOverView.IRefreshState.STATE_REFRESH;
+            mState = OverView.IRefreshState.STATE_REFRESH;
 
             mOverView.onRefresh();
-            mOverView.setState(IOverView.IRefreshState.STATE_REFRESH);
+            mOverView.setState(OverView.IRefreshState.STATE_REFRESH);
             mRefreshListener.onRefresh();
         }
     }

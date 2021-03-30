@@ -8,15 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adapter.kit.IAdapter
-import com.adapter.kit.IDataItem
+import com.adapter.kit.AdapterKit
+import com.adapter.kit.DataItem
 import com.example.refreshkit.R
-import com.example.refreshkit.demo1.ILottieOverView
-import com.refresh.kit.IRecyclerView
+import com.refresh.kit.MagicRecyclerView
+
 import com.refresh.kit.core.IRefresh
-import com.refresh.kit.core.IRefreshLayout
-import com.refresh.kit.view.IOverView
-import com.refresh.kit.view.ITextOverView
+import com.refresh.kit.core.RefreshLayout
+
+import com.refresh.kit.view.OverView
+import com.refresh.kit.view.TextOverView
 import kotlinx.android.synthetic.main.activity_i_asb_list.*
 
 /**
@@ -24,10 +25,10 @@ import kotlinx.android.synthetic.main.activity_i_asb_list.*
  */
 abstract class AbsListActivity : AppCompatActivity(), IRefresh.IRefreshListener {
 
-    private lateinit var mRefreshHeaderView: ITextOverView
-    private lateinit var mAdapter: IAdapter
-    protected var mRefreshLayout: IRefreshLayout? = null
-    protected var mRecyclerView: IRecyclerView? = null
+    private lateinit var mRefreshHeaderView: TextOverView
+    private lateinit var mAdapter: AdapterKit
+    protected var mRefreshLayout: RefreshLayout? = null
+    protected var mRecyclerView: MagicRecyclerView? = null
 
     private var mProgressBar: ContentLoadingProgressBar? = null
     protected var pageIndex = 1
@@ -45,13 +46,13 @@ abstract class AbsListActivity : AppCompatActivity(), IRefresh.IRefreshListener 
         this.mProgressBar = progress_bar
 
         //下拉刷新视图,设置给IRefreshLayout上
-        mRefreshHeaderView = ITextOverView(this)
+        mRefreshHeaderView = TextOverView(this)
         mRefreshLayout?.setRefreshOverView(mRefreshHeaderView)
         mRefreshLayout?.setRefreshListener(this)
 
         //设置recyclerview
         val layoutManager = createLayoutManager()
-        mAdapter = IAdapter(this)
+        mAdapter = AdapterKit(this)
         mRecyclerView?.layoutManager = layoutManager
         mRecyclerView?.adapter = mAdapter
 
@@ -90,7 +91,7 @@ abstract class AbsListActivity : AppCompatActivity(), IRefresh.IRefreshListener 
     open fun enableLoadMore(callback: () -> Unit) {
         //为了防止 同时 下拉刷新 和上拉分页的请求，这里就需要处理一把
         mRecyclerView?.enableLoadMore({
-            if (mRefreshHeaderView.state == IOverView.IRefreshState.STATE_REFRESH) {
+            if (mRefreshHeaderView.state == OverView.IRefreshState.STATE_REFRESH) {
                 //正处于刷新状态
                 mRecyclerView?.loadFinished(false)
                 return@enableLoadMore
@@ -111,7 +112,7 @@ abstract class AbsListActivity : AppCompatActivity(), IRefresh.IRefreshListener 
     /**
      * 完成下拉刷新或加载更多
      */
-    open fun finishRefresh(dataItemList: List<IDataItem<*, out RecyclerView.ViewHolder>>?) {
+    open fun finishRefresh(dataItemList: List<DataItem<*, out RecyclerView.ViewHolder>>?) {
         val success = dataItemList != null && dataItemList.isNotEmpty()
         val refresh = pageIndex == 1
         if (refresh) {//下拉刷新

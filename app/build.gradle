@@ -37,8 +37,8 @@ dependencies {
     implementation "com.airbnb.android:lottie:3.3.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-    implementation 'com.android.ydkit:adapter-kit:1.0.0'
+    implementation 'com.android.ydkit:adapter-kit:1.0.1'
 
-//    implementation project(path: ':refresh-kit')
-    implementation 'com.android.ydkit:refresh-kit:1.0.0'
+    implementation project(path: ':refresh-kit')
+//    implementation 'com.android.ydkit:refresh-kit:1.0.0'
 }

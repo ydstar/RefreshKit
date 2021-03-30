@@ -46,9 +46,9 @@ class RefreshDemo2Activity : AbsListActivity() {
      * 成功拿到数据
      */
     private fun requestDataSuccess(list: ArrayList<String>) {
-        val dataItems = mutableListOf<DataItem>()
+        val dataItems = mutableListOf<MyDataItem>()
         for (str in list) {
-            val goodsItem = DataItem(str)
+            val goodsItem = MyDataItem(str)
             dataItems.add(goodsItem)
         }
         //完成下拉刷新或加载更多

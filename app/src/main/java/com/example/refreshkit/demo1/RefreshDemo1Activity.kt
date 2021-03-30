@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.refreshkit.R
 import com.refresh.kit.core.IRefresh
-import com.refresh.kit.core.IRefreshLayout
-import com.refresh.kit.view.ITextOverView
+import com.refresh.kit.core.RefreshLayout
+
 
 /**
  * 下拉刷新
@@ -35,9 +35,9 @@ class RefreshDemo1Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_i_refresh_demo)
-        val refreshLayout = findViewById<IRefreshLayout>(R.id.refresh_layout)
+        val refreshLayout = findViewById<RefreshLayout>(R.id.refresh_layout)
 
-        val iLottieOverView = ILottieOverView(this)
+        val iLottieOverView = LottieOverView(this)
         refreshLayout.setRefreshOverView(iLottieOverView)
 
         refreshLayout.setRefreshListener(object : IRefresh.IRefreshListener {

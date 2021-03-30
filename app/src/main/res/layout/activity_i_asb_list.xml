@@ -5,16 +5,16 @@
     android:layout_height="match_parent">
 
 
-    <com.refresh.kit.core.IRefreshLayout
+    <com.refresh.kit.core.RefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.refresh.kit.IRecyclerView
+        <com.refresh.kit.MagicRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.refresh.kit.core.IRefreshLayout>
+    </com.refresh.kit.core.RefreshLayout>
 
 
     <androidx.core.widget.ContentLoadingProgressBar

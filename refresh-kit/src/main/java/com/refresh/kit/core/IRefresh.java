@@ -1,12 +1,12 @@
 package com.refresh.kit.core;
 
-import com.refresh.kit.view.IOverView;
+import com.refresh.kit.view.OverView;
 
 /**
  * Author: 信仰年轻
  * Date: 2020-09-21 15:36
  * Email: hydznsqk@163.com
- * Des:
+ * Des: 下拉刷新顶层接口
  */
 public interface IRefresh {
 
@@ -28,7 +28,7 @@ public interface IRefresh {
      *
      * @param iOverView 下拉刷新的视图
      */
-    void setRefreshOverView(IOverView iOverView);
+    void setRefreshOverView(OverView iOverView);
 
 
     /**

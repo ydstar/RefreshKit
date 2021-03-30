@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.adapter.kit.IDataItem
+import com.adapter.kit.DataItem
 import com.example.refreshkit.R
 
 
@@ -14,7 +14,7 @@ import com.example.refreshkit.R
  * Email: hydznsqk@163.com
  * Des:
  */
-class DataItem(var data: String): IDataItem<String, DataItem.ActivityHolder>(data) {
+class MyDataItem(var data: String): DataItem<String, MyDataItem.ActivityHolder>(data) {
 
 
     override fun getItemLayoutRes(): Int {

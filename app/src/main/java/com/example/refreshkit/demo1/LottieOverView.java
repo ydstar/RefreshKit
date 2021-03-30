@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.refreshkit.R;
-import com.refresh.kit.view.IOverView;
+import com.refresh.kit.view.OverView;
 
 
 /**
@@ -15,18 +15,18 @@ import com.refresh.kit.view.IOverView;
  * Email: hydznsqk@163.com
  * Des: 自定义下拉头
  */
-public class ILottieOverView extends IOverView {
+public class LottieOverView extends OverView {
     private LottieAnimationView pullAnimationView;
 
-    public ILottieOverView(Context context, AttributeSet attrs, int defStyle) {
+    public LottieOverView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public ILottieOverView(Context context, AttributeSet attrs) {
+    public LottieOverView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ILottieOverView(Context context) {
+    public LottieOverView(Context context) {
         super(context);
     }
 
