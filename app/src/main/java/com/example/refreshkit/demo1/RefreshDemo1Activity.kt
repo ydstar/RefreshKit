@@ -37,8 +37,8 @@ class RefreshDemo1Activity : AppCompatActivity() {
         setContentView(R.layout.activity_i_refresh_demo)
         val refreshLayout = findViewById<RefreshLayout>(R.id.refresh_layout)
 
-        val iLottieOverView = LottieOverView(this)
-        refreshLayout.setRefreshOverView(iLottieOverView)
+        val lottieOverView = LottieOverView(this)
+        refreshLayout.setRefreshOverView(lottieOverView)
 
         refreshLayout.setRefreshListener(object : IRefresh.IRefreshListener {
             //下拉刷新的时候会调用下面这个方法,一般情况下都是下拉刷新之后去请求数据,然后刷新列表
